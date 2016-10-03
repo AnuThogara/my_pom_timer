@@ -5,23 +5,29 @@
     var seconds = $('#seconds');
     var minutes = $('#minutes');
     var breakButton = $('#break');
+    var resetButton = $('#reset');
     var isOnBraek = false;
+    var isOnReset = false;
     var timerInterval;
+
     // main functionaility
 
     startButton.on('click', startTimer);
     breakButton.on('click', startBreak);
+    resetButton.on('click', resetTimer);
 
     function startBreak() {
         isOnBraek = true;
         //set minutes to 5 minutes
-        minutes.text('05');
+        minutes.text('00');
 
         //set seconds to 5 seconds
-        seconds.text('00');
+        seconds.text('05');
         //hide break button
         breakButton.hide();
+
         //start timer
+        resetButton.hide();
         startTimer();
 
     }
@@ -33,21 +39,34 @@
         if (!timerInterval) {
             timerInterval = setInterval(countdown, 1000);
         }
+
         // add condition
-        //           if(startButton.html()==="Start" || !timerInterval){
-        //             startButton.html('Pause');
-        // // add condition
-        //             timerInterval = setInterval(countdown , 1000);
-        //           }
-        // // add condition
-        //           else if(startButton.html()==="Pause")
-        //           {
+        //            if(startButton.html()==="Start" || !timerInterval){
+        //              startButton.html('Pause');
+        // // // add condition
+        //              timerInterval = setInterval(countdown , 1000);
+        //            }
+        // // // add condition
+        //            else if(startButton.html()==="Pause")
+        //            {
         //             clearInterval(timerInterval);
-        //             startButton.html('Start');
-        //           }
-        // add condition
+        //           startButton.html('Start');
+        //        }
+        // // add condition
     }
     //function definition
+    function resetTimer() {
+
+        clearInterval(timerInterval);
+        timerInterval = null;
+        var secondsText = "05";
+        var secondsTextAsNumber = parseInt(secondsText);
+        var minutesText = "00";
+        var minutesTextAsNumber = parseInt(minutesText);
+        seconds.text(pad(secondsTextAsNumber));
+        minutes.text(pad(minutesTextAsNumber));
+
+    }
 
     function countdown() {
         var secondsText = seconds.text();
@@ -59,17 +78,21 @@
             clearInterval(timerInterval);
             timerInterval = null;
             if (!isOnBraek) {
-                 //disable the start button
+                //disable the start button
                 startButton.attr('disabled', true);
+                resetButton.attr('disabled', true);
+
                 //unhide the break button
                 breakButton.show();
 
             } else {
 
-                seconds.text('00');
-                minutes.text('25');
+                seconds.text('05');
+                minutes.text('00');
                 startButton.attr('disabled', false);
+                resetButton.attr('disabled', false);
                 isOnBraek = false;
+                resetButton.show();
 
                 //minutes.text("24");
             }
