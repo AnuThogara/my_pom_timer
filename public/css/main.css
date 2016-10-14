@@ -1,16 +1,54 @@
+
+body {
+    background: url(../images/timer.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+/*label{
+  display:block;
+  float: left;
+  width: 10em;
+}*/
 #timer{
-  font-size: 1800%;
+background: url(../images/tomato1.png);
+background-repeat: no-repeat;
+margin-left: 20px;
+color: white;
+font-size: 1600%;
+border-radius: 3px;
 }
-#start{
+/*#button-div{
+  margin-left: 140px;
+
+}*/
+button{
  /*margin-top: 100px;*/
-  font-size: 750%;
+ margin-left: 100px;
+ padding: 15px 25px;
+   font-size: 24px;
+   text-align: center;
+   cursor: pointer;
+   outline: none;
+   color: #fff;
+   background-color: #4CAF50;
+   border: none;
+   border-radius: 15px;
+   box-shadow: 0 9px #999;
 }
-#break{
-  font-size: 750%;
-  display: none;
+button::first-letter{
+  text-decoration: underline;
+  text-transform: uppercase;
 }
-.worklabel{
 
-  color:blue;
+button:hover {background-color: #3e8e41}
 
+button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
 }
+
+
+/*body{
+  background: -webkit-linear-gradient(left, rgba(168,168,168,1) 5%, rgba(148,148,148,1) 10%, rgba(0,0,0,1) 40%, rgba(117,117,117,1) 8%, rgba(71,71,71,1) 43%, rgba(36,36,36,1) 50%, rgba(31,31,31,1) 51%, rgba(31,31,31,1) 56%, rgba(71,71,71,1) 59%, rgba(128,128,128,1) 66%,
+  rgba(71,71,71,1) 71%, rgba(46,46,46,1) 74%, rgba(46,46,46,1) 100%);*/

@@ -13,16 +13,21 @@
 <body>
     <!-- Total Work & Break Time - Start -->
     <div class="row">
-        <div class="col-md-7 col-md-offset-2">
+      <form class="form-inline">
+        <div class="col-md-7 col-md-offset-2 form-group">
             <h3 class="worklabel">
-            <label>Set Work Time : </label><input id=inputworktime value="2"/>
-            <br>
-            <label>Set Break Time :</label><input id=inputbreaktime value="1"/>
-            </h3>
+            <label for="inputworktime">Set Work Time : </label><input class="form-control" id=inputworktime value="1"/>
+            <label for="inputbreaktime">Set Break Time :</label><input class="form-control" id=inputbreaktime value="1"/>
+          </h3>
+          <h2>Work Time</h2>
         </div>
+      </form>
     </div>
     <!-- Total Work & Break Time - End -->
     <div class="container">
+      <div class="row">
+        <h2><span id="timername"></span></h2>
+      </div>
         <div class="row">
             <div class="col-md-7 col-md-offset-2">
                 <h1 id="timer">
@@ -31,21 +36,21 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-7 col-md-offset-2">
-                <button class="btn btn-success btn-block" id="start">Start</button>
-                <button class="btn btn-primary btn-block" id="break">Break</button>
-                <button class="btn btn-primary btn-block" id="reset">Reset</button>
-                <button class="btn btn-primary btn-block" id="progress">Progress</button>
-                <button class="btn btn-primary btn-block" id="resetprogress">Reset Progress</button>
+            <div id="button-div">
+                <button id="start">Start</button>
+                <button id="break" hidden="true">Break</button>
+                <button id="reset">Reset</button>
+                <!-- <button class="btn btn-primary btn-block" id="progress">Progress</button> -->
+                <button id="resetprogress">Clear Progress</button>
             </div>
         </div>
     </div>
     <!-- Total Work & Break Time - Start -->
     <div class="row" id=divprogress>
         <div class="col-md-7 col-md-offset-2">
-            <h3 class="worklabel">
-          <label>Total Work Time : </label><span id="worktime">00</span>
-          <label>Total Break Time : </label><span id="breaktime">00</span>
+            <h3>
+          <label>Total Work Time : </label><span id="totalworktime">00</span>
+          <label>Total Break Time : </label><span id="totalbreaktime">00</span>
           </h3>
         </div>
     </div>

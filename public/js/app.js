@@ -6,58 +6,77 @@
     var minutes = $('#minutes');
     var breakButton = $('#break');
     var resetButton = $('#reset');
+    var timername = $('#timername');
     var isOnBraek = false;
     var isOnReset = false;
     var timerInterval;
+
+    // var trackTime = {
+    //     trackId: 0,
+    //     startTime: Date(),
+    //     totalSeconds: 0,
+    //     trackType: "Test",
+    //     getTime: function() {
+    //         return this.trackId + " -> " + this.startTime + " to " + this.endTime + " is a " + this.trackType;
+    //     }
+    // };
+
+    // var trackTimes = [trackTime];
     // var arrayWorktime=[];
 
-// Total Work & Break Time - Start
-var progressButton = $('#progress');
-var resetprogressButton = $('#resetprogress');
+    // Total Work & Break Time - Start
+    // var progressButton = $('#progress');
+    var resetprogressButton = $('#resetprogress');
 
-var inputworktime = $('#inputworktime');
-var inputbreaktime = $('#inputbreaktime');
+    var inputworktime = $('#inputworktime');
+    var inputbreaktime = $('#inputbreaktime');
 
-var worktime = $('#worktime');
-var breaktime = $('#breaktime');
-// Total Work & Break Time - End
+    var totalworktime = $('#totalworktime');
+    var totalbreaktime = $('#totalbreaktime');
+
+    var totalseconds = 0;
+    breakButton.hide();
+    // Total Work & Break Time - End
 
     // main functionaility
 
     // Total Work & Break Time - Start
-    $('#divprogress').hide();
-    progressButton.on('click', showProgress);
-    resetprogressButton.on('click', resetProgress);
-
-    if (localStorage.worktime) {
-      worktime.text(localStorage.worktime);
-    } else
-        worktime.text("0");
-
-        if (localStorage.breaktime) {
-          breaktime.text(localStorage.breaktime);
-        } else
-            breaktime.text("0");
-
-    function showProgress(){
-      $('#divprogress').show();
-      // var array = ['TEST1','TEST2'];
-      // var newHTML = [];
-      // for (var i = 0; i < array.length; i++) {
-      //     newHTML.push('<span>' + array[i] + '</span><br>');
-      // }$("#divarray").html(newHTML.join(""));
-    }
-    function resetProgress(){
-      localStorage.clear();
-      worktime.text("0");
-      breaktime.text("0");
-
-    }
-    // Total Work & Break Time - End
-
+    // $('#divprogress').hide();
+    // progressButton.on('click', showProgress);
     startButton.on('click', startTimer);
     breakButton.on('click', startBreak);
     resetButton.on('click', resetTimer);
+
+    resetprogressButton.on('click', resetProgress);
+
+    if (localStorage.worktime && !isNaN(localStorage.worktime)) {
+        totalworktime.text(convertSeconds(localStorage.worktime));
+    } else {
+        totalworktime.text("0");
+        localStorage.worktime = 0;
+    }
+    if (localStorage.breaktime && !isNaN(localStorage.breaktime)) {
+        totalbreaktime.text(convertSeconds(localStorage.breaktime));
+    } else {
+        totalbreaktime.text("0");
+        localStorage.breaktime = 0;
+    }
+
+    // function showProgress(){
+    //   $('#divprogress').show();
+    //   // var array = ['TEST1','TEST2'];
+    //   // var newHTML = [];
+    //   // for (var i = 0; i < array.length; i++) {
+    //   //     newHTML.push('<span>' + array[i] + '</span><br>');
+    //   // }$("#divarray").html(newHTML.join(""));
+    // }
+    function resetProgress() {
+        localStorage.clear();
+        totalworktime.text("0");
+        totalbreaktime.text("0");
+
+    }
+    // Total Work & Break Time - End
 
     function startBreak() {
         isOnBraek = true;
@@ -81,50 +100,42 @@ var breaktime = $('#breaktime');
         if (!timerInterval) {
             timerInterval = setInterval(countdown, 1000);
 
-            if(isOnBraek) {
-              minutes.text(pad(inputbreaktime.val()));
-            }
-            else {
-              minutes.text(pad(inputworktime.val()));
+            totalseconds = 0;
+
+            if (isOnBraek) {
+                minutes.text(pad(inputbreaktime.val()));
+                timername.text("Break Time ");
+            } else {
+                minutes.text(pad(inputworktime.val()));
+                // timername.text("Work Time ");
             }
 
         }
 
-        // add condition
-        //            if(startButton.html()==="Start" || !timerInterval){
-        //              startButton.html('Pause');
-        // // // add condition
-        //              timerInterval = setInterval(countdown , 1000);
-        //            }
-        // // // add condition
-        //            else if(startButton.html()==="Pause")
-        //            {
-        //             clearInterval(timerInterval);
-        //           startButton.html('Start');
-        //        }
-        // // add condition
     }
     //function definition
     function resetTimer() {
 
-      clearInterval(timerInterval);
-      timerInterval = null;
-      var secondsText = "00";
-      var secondsTextAsNumber = parseInt(secondsText);
-      var minutesText = "00";
-      var minutesTextAsNumber = parseInt(minutesText);
-      seconds.text(pad(secondsTextAsNumber));
-      minutes.text(pad(minutesTextAsNumber));
+        clearInterval(timerInterval);
+        timerInterval = null;
+        timername.text(" ");
+        var currentminutes = parseInt(minutes.text());
+        var currentseconds = parseInt(seconds.text());
+        var secondsText = "00";
+        var secondsTextAsNumber = parseInt(secondsText);
+        var minutesText = "00";
+        var minutesTextAsNumber = parseInt(minutesText);
+        seconds.text(pad(secondsTextAsNumber));
+        minutes.text(pad(minutesTextAsNumber));
 
-      // Total Work & Break Time - Start
-      if(timerInterval!==null){
-        var numworktime = parseInt(worktime.text());
-        var intseconds = parseInt(seconds.text());
-        var intminutes = parseInt(minutes.text());
-        worktime.text(numworktime+((parseInt(inputworktime.val())*60)-(intseconds+(intminutes*60)))/60);
-        localStorage.worktime = parseInt(worktime.text());
-     }
-     // Total Work & Break Time - End
+        // Total Work & Break Time - Start
+        var numworktime = 0;
+        if(!isNaN(localStorage.worktime))
+          numworktime = parseInt(localStorage.worktime);
+
+        localStorage.worktime = parseInt((numworktime + totalseconds));
+        totalworktime.text(convertSeconds(parseInt(localStorage.worktime)));
+        // Total Work & Break Time - End
 
     }
 
@@ -134,21 +145,42 @@ var breaktime = $('#breaktime');
         var minutesText = minutes.text();
         var minutesTextAsNumber = parseInt(minutesText);
 
+        totalseconds = totalseconds + 1;
+
         if (minutesTextAsNumber === 0 && secondsTextAsNumber === 0) {
             clearInterval(timerInterval);
             timerInterval = null;
+            timername.text(" ");
 
             // Total Work & Break Time - Start
-            if(!isOnBraek) {
-              var numworktime = parseInt(worktime.text());
-              worktime.text((numworktime*60)+parseInt(inputworktime.val()*60)/60);
-              localStorage.worktime = parseInt(worktime.text());
-            }
-            else {
-              var numbreaktime = parseInt(breaktime.text());
-              breaktime.text((numbreaktime*60)+parseInt(inputbreaktime.val()*60)/60);
-              localStorage.breaktime = parseInt(breaktime.text());
+            if (!isOnBraek) {
+                breakButton.show();
 
+                var numworktime = 0;
+                if(!isNaN(localStorage.worktime))
+                  numworktime = parseInt(localStorage.worktime);
+
+                localStorage.worktime = parseInt((numworktime + parseInt(inputworktime.val() * 60)));
+                totalworktime.text(convertSeconds(parseInt(localStorage.worktime)));
+
+                //                trackTimes.push(trackTimes.length, formatDateTime(Date()), (inputworktime.val() * 60), "WorkTime");
+                //                console.write(trackTimes[trackTimes.length - 1].getTime());
+                //              $(document.body).append($.now()+' - Worktime till now : '+localStorage.worktime+'<br>');
+            } else {
+
+                breakButton.hide();
+
+                var numbreaktime = 0;
+                if(!isNaN(localStorage.breaktime))
+                  numbreaktime = parseInt(localStorage.breaktime);
+
+
+                localStorage.breaktime = parseInt((numbreaktime + parseInt(inputbreaktime.val() * 60)));
+                totalbreaktime.text(convertSeconds(parseInt(localStorage.breaktime)));
+
+                //                trackTimes.push(trackTimes.length, formatDateTime(Date()), (inputbreaktime.val() * 60), "BreakTime");
+                //                console.write(trackTimes[trackTimes.length - 1].getTime());
+                //              $(document.body).append($.now()+' - Breaktime till now : '+localStorage.worktime+'<br>');
             }
             // Total Work & Break Time - End
 
@@ -156,7 +188,7 @@ var breaktime = $('#breaktime');
                 //disable the start button
                 startButton.attr('disabled', true);
                 resetButton.attr('disabled', true);
-                progressButton.attr('disabled', true);
+                // progressButton.attr('disabled', true);
                 resetprogressButton.attr('disabled', true);
 
                 //unhide the break button
@@ -165,10 +197,10 @@ var breaktime = $('#breaktime');
             } else {
 
                 seconds.text('00');
-                minutes.text(inputbreaktime.val());
+                minutes.text(pad(inputbreaktime.val()));
                 startButton.attr('disabled', false);
                 resetButton.attr('disabled', false);
-                progressButton.attr('disabled', false);
+                // progressButton.attr('disabled', false);
                 resetprogressButton.attr('disabled', false);
                 isOnBraek = false;
                 resetButton.show();
@@ -205,4 +237,45 @@ var breaktime = $('#breaktime');
             return num;
         }
     }
+
+    function formatDateTime(valDate) {
+        var d = new Date(valDate);
+        var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+        var date = d.getDay() + " " + month[d.getMonth()] + ", " + d.getFullYear();
+        var time = d.toLocaleTimeString().toLowerCase();
+
+        return date + " " + time;
+    }
+
+    function convertSeconds(valSeconds) {
+        var totalSec = valSeconds;
+        var hours = parseInt(totalSec / 3600) % 24;
+        var minutes = parseInt(totalSec / 60) % 60;
+        var seconds = totalSec % 60;
+
+        var result = " ";
+        if (hours > 0)
+            result = (hours < 10 ? "0" + hours : hours) + " Hrs ";
+        if (minutes > 0)
+            result = result + (minutes < 10 ? "0" + minutes : minutes) + " Min ";
+        if (seconds > 0)
+            result = result + (seconds < 10 ? "0" + seconds : seconds) + " Sec ";
+        if(result.trim().length===0)
+          result ="00";
+        return result;
+    }
+
+    $(window).keypress(function(e) {
+        var ev = e || window.event;
+        var key = ev.keyCode || ev.which;
+        if (key == 115 || key == 83)
+            startTimer();
+        if (key == 98 || key == 66)
+            startBreak();
+        if (key == 114 || key == 82)
+            resetTimer();
+        if (key==99 || key==67)
+            resetProgress();
+    });
 }());
